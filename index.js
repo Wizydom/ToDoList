@@ -6,14 +6,12 @@ var connection = mysql.createConnection({
   password : process.env.PASSWORD,
   database : process.env.DATABASE
 });
-connection.connect();
+connection.connect(function(err) {
+  if (err) {
+    console.error('error connecting: ' + err.stack);
+    return;
+  }
  
-
- try {
-    connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-        console.log("connexion réussie");
-      });
- } catch (error) {
-    console.log(error)
- }
+  console.log('connected as id ' + connection.threadId);
+});
 connection.end();
