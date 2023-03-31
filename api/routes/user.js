@@ -4,8 +4,10 @@ import CryptoJS from "crypto-js";
 import { connectToDb } from "../connect.js";
 dotenv.config();
 
-const router = express.Router();
-router.post('/create', async (request, response) => {
+const router = express.Router();//creation d'une route 
+/*declaration d'une méthode post de la route (elle prend en paramètre le chemin de la route cad le nom qu'on veut donner à la route et un callback
+qui prend aussi deux paramètres(requete et reponse))*/
+router.post('/create', async (request, response) => {//asynch c'est pour quand on va utiliser des requetes qui prennent du temps et qui doivent  s'excuter avant de continuer
     // Recuperation des information pour creer un user
     const pass = request.body.mot_de_passe
     // Crypage de password
@@ -31,6 +33,5 @@ router.post('/create', async (request, response) => {
         }
       });
     response.status(201).json({ passBefor: newUser.mot_de_passe, passAfter: encryptedPassord });
-})
-
+    })
 export default router
