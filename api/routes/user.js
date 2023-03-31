@@ -17,7 +17,8 @@ router.post('/create', async (request, response) => {//asynch c'est pour quand o
         nom: request.body.nom,
         prenom: request.body.prenom,
         email: request.body.email,
-        mot_de_passe: encryptedPassord
+        pseudo:request.body.pseudo,
+        mot_de_passe: encryptedPassord,
     }
     // Requête d'insertion dans la table "user"
     const query = 'INSERT INTO user SET ?';
@@ -32,6 +33,7 @@ router.post('/create', async (request, response) => {//asynch c'est pour quand o
           console.log('Nouvel utilisateur inséré avec succès.');
         }
       });
-    response.status(201).json({ passBefor: newUser.mot_de_passe, passAfter: encryptedPassord });
+      const {mot_de_passe,...all}= newUser;
+    response.status(201).json({ data:all });
     })
 export default router

@@ -12,4 +12,4 @@ app.listen(port,  () => {// Rhozales a dit: "mets toi en ecoute sur ce port là"
 app.get('/', function (req, res) {//route de la page principale une fois la connection établie
     res.send('Bienvenue sur Task.com');
 });
-app.use('/task/v1',userRouter)//ça c'est ce qui s'affichera lorsqu'un utilisateur cliquera sur notre lien  + la reference donné dans router de user
+app.use('/todolist/user/v1',userRouter)//ça c'est ce qui s'affichera lorsqu'un utilisateur cliquera sur notre lien  + la reference donné dans router de user
