@@ -1,0 +1,79 @@
+Pour ajouter la fonctionnalité d'attribution de tâches, vous pouvez ajouter une nouvelle table "attribution" qui va permettre de faire le lien entre les utilisateurs et les tâches attribuées :
+
+Table "user" :
+
+    user_id (clé primaire)
+    nom
+    prénom
+    email
+    mot_de_passe
+
+Table "task" :
+
+    task_id (clé primaire)
+    titre
+    description
+    date_de_création
+    date_de_fin
+    statut
+    user_id (clé étrangère faisant référence à la table "user")
+
+Table "partage" :
+
+    partage_id (clé primaire)
+    user_id (clé étrangère faisant référence à la table "user" pour l'utilisateur qui partage la tâche)
+    task_id (clé étrangère faisant référence à la table "task" pour la tâche partagée)
+    droit (un champ qui indique les droits de l'utilisateur partagé, par exemple "lecture seule" ou "lecture et écriture")
+
+Table "attribution" :
+
+    attribution_id (clé primaire)
+    user_id (clé étrangère faisant référence à la table "user" pour l'utilisateur à qui la tâche est attribuée)
+    task_id (clé étrangère faisant référence à la table "task" pour la tâche attribuée)
+
+Relation :
+
+    Un utilisateur peut créer plusieurs tâches (relation un-à-plusieurs entre la table "user" et la table "task").
+    Une tâche ne peut être créée que par un seul utilisateur (relation un-à-un entre la table "user" et la table "task").
+    Un utilisateur peut supprimer plusieurs tâches (relation un-à-plusieurs entre la table "user" et la table "task").
+    Une tâche ne peut être supprimée que par un seul utilisateur (relation un-à-un entre la table "user" et la table "task").
+    Une tâche peut être partagée avec plusieurs utilisateurs (relation un-à-plusieurs entre la table "task" et la table "partage").
+    Un utilisateur peut partager plusieurs tâches avec d'autres utilisateurs (relation un-à-plusieurs entre la table "user" et la table "partage").
+    Une tâche peut être attribuée à plusieurs utilisateurs (relation un-à-plusieurs entre la table "task" et la table "attribution").
+    Un utilisateur peut se voir attribuer plusieurs tâches (relation un-à-plusieurs entre la table "user" et la table "attribution").
+
+Avec cette mise à jour du modèle de données, chaque tâche peut être attribuée à plusieurs utilisateurs, et chaque utilisateur peut se voir attribuer plusieurs tâches. La table "partage" permet toujours de partager une tâche avec d'autres utilisateurs. Vous pouvez ajouter d'autres fonctionnalités à votre application en utilisant ce modèle de base de données, par exemple la possibilité de suivre l'historique des attributions sur une tâche attribuée.
+
+CREATE TABLE user (
+  user_id INT PRIMARY KEY,
+  nom VARCHAR(50),
+  prenom VARCHAR(50),
+  email VARCHAR(100),
+  mot_de_passe VARCHAR(50)
+);
+
+CREATE TABLE task (
+  task_id INT PRIMARY KEY,
+  titre VARCHAR(100),
+  description TEXT,
+  date_de_creation DATE,
+  date_de_fin DATE,
+  statut VARCHAR(50),
+  user_id INT,
+  FOREIGN KEY (user_id) REFERENCES user(user_id)
+);
+CREATE TABLE partage (
+  partage_id INT PRIMARY KEY,
+  user_id INT,
+  task_id INT,
+  droit VARCHAR(50),
+  FOREIGN KEY (user_id) REFERENCES user(user_id),
+  FOREIGN KEY (task_id) REFERENCES task(task_id)
+);
+CREATE TABLE attribution (
+  attribution_id INT PRIMARY KEY,
+  user_id INT,
+  task_id INT,
+  FOREIGN KEY (user_id) REFERENCES user(user_id),
+  FOREIGN KEY (task_id) REFERENCES task(task_id)
+);
