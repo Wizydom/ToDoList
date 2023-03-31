@@ -1,5 +1,6 @@
-require('dotenv').config()
-var mysql = require('mysql');
+import dotenv from "dotenv";
+import mysql from 'mysql'
+dotenv.config();
 var connection = mysql.createConnection({
   host: process.env.HOST,
   user: process.env.USER,
