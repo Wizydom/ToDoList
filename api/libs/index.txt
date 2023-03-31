@@ -63,6 +63,7 @@ CREATE TABLE task (
   user_id INT,
   FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
+
 CREATE TABLE partage (
   partage_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id INT,
@@ -71,6 +72,7 @@ CREATE TABLE partage (
   FOREIGN KEY (user_id) REFERENCES user(user_id),
   FOREIGN KEY (task_id) REFERENCES task(task_id)
 );
+
 CREATE TABLE attribution (
   attribution_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id INT,

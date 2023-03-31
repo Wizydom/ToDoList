@@ -14,26 +14,29 @@ router.post('/create', async (request, response) => {//asynch c'est pour quand o
     const encryptedPassord = CryptoJS.AES.encrypt(pass, process.env.CRYPTAGE).toString();
     // Définir les données à insérer
     const newUser = {
-        nom: request.body.nom,
-        prenom: request.body.prenom,
-        email: request.body.email,
-        pseudo:request.body.pseudo,
-        mot_de_passe: encryptedPassord,
+      nom: request.body.nom,
+      prenom: request.body.prenom,
+      email: request.body.email,
+      pseudo: request.body.pseudo,
+      mot_de_passe: encryptedPassord,
     }
     // Requête d'insertion dans la table "user"
     const query = 'INSERT INTO user SET ?';
     // connexiona la DB
-   const db= connectToDb()
-   db.connect()
+    const db = connectToDb()
+    db.connect()
     // Exécuter la requête avec les données à insérer
     db.query(query, newUser, (error, results, fields) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log('Nouvel utilisateur inséré avec succès.');
-        }
-      });
-      const {mot_de_passe,...all}= newUser;
-    response.status(201).json({ data:all });
-    })
+      if (error) {
+        console.error(error);
+        response.status(500).json({ message:error.message});
+      } else {
+        console.log('Nouvel utilisateur inséré avec succès.');
+        const { mot_de_passe, ...all } = newUser;
+        response.status(201).json({ data: all });
+      }
+    });
+
+
+})
 export default router
