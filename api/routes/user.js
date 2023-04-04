@@ -47,7 +47,7 @@ router.get('/login', (request, response) => {
   const email = request.body.email
   const requestPassword = request.body.password
   const db = connectToDb()
-  db.connect(() => console.log("Connecté"))
+  db.connect()
   const query = `SELECT * FROM user WHERE email = '${email}'`;
   db.query(query, (error, results, fields) => {
     if (error) {
@@ -71,5 +71,47 @@ router.get('/login', (request, response) => {
   // db.close()
 
 
+})
+
+// MISE A JOUR
+router.put('/update', (request, response) => {
+  const pass = request.body.mot_de_passe
+  const encryptedPassord = CryptoJS.AES.encrypt(pass, process.env.CRYPTAGE).toString();
+ const id = request.body.user_id
+  const newNom = request.body.nom
+  const newPrenom = request.body.prenom
+  const newEmail = request.body.email
+  const newPseudo = request.body.pseudo
+  const newMot_de_passe = encryptedPassord
+  const db = connectToDb()
+  db.connect()
+  const query = `UPDATE user SET email = '${newEmail}', mot_de_passe = '${newMot_de_passe}',nom = '${newNom}',prenom= '${newPrenom}',pseudo= '${newPseudo}' WHERE user_id = ${id}`;
+  db.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    console.log(results.affectedRows + ' row(s) updated');
+    response.status(200).json({ message: "User updated" })
+  });
+
+})
+
+
+
+router.delete('/delete',(request,response)=>{
+  const id = request.body.user_id
+  const query = `DELETE FROM user WHERE user_id = ${id}`;
+  const db = connectToDb()
+  db.connect()
+  db.query(query,(error,results,fields)=>{
+    if(error){
+      console.log(error)
+      response.status(500).json({message:error.message})
+      return;
+    } else{
+      response.status(200).json({message:"Utilisateur supprimé"})
+    }
+  })
 })
 export default router
